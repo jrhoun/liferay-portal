@@ -77,6 +77,11 @@ pre[class*='language-'] {
 	color: var(--color-neutral-10);
 }
 
+div.mermaid {
+	max-width: 100%;
+	overflow-x: auto;
+}
+
 .adm-block {
 	border-radius: var(--border-radius, 0.5rem);
 	margin: var(--spacer-3, 1rem) 0;

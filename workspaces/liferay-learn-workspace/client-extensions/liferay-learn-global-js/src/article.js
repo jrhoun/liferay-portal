@@ -5,6 +5,47 @@
 
 import DropdownProvider from './DropdownProvider';
 
+let _mermaid = null;
+
+async function initMermaid() {
+	const mermaidElements = document.querySelectorAll('div.mermaid');
+
+	if (!mermaidElements.length) {
+		return;
+	}
+
+	if (!_mermaid) {
+		const module = await import(
+
+			/* webpackChunkName: "mermaid" */ 'mermaid'
+		);
+
+		_mermaid = module.default;
+
+		const style = getComputedStyle(document.documentElement);
+		const get = (v) => style.getPropertyValue(v).trim();
+
+		_mermaid.initialize({
+			securityLevel: 'strict',
+			startOnLoad: false,
+			theme: 'base',
+			themeVariables: {
+				edgeLabelBackground: get('--color-neutral-0'),
+				fontFamily: get('--font-family-base'),
+				lineColor: get('--color-neutral-7'),
+				primaryBorderColor: get('--color-brand-primary'),
+				primaryColor: get('--color-brand-primary-lighten-5'),
+				primaryTextColor: get('--color-neutral-10'),
+				secondaryColor: get('--color-neutral-1'),
+				tertiaryColor: get('--color-neutral-1'),
+			},
+			useMaxWidth: true,
+		});
+	}
+
+	await _mermaid.run({nodes: mermaidElements});
+}
+
 function initArticle() {
 
 	// Table of contents reading indicator
@@ -95,6 +136,8 @@ function initArticle() {
 		'show',
 		true
 	);
+
+	initMermaid();
 }
 
 document.addEventListener('DOMContentLoaded', initArticle);

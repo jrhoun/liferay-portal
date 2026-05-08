@@ -1,8 +1,8 @@
 # Using liferay-learn:message Tags
 
-You can provide direct links to [Liferay Learn](https://learn.liferay.com) documentation from Liferay's UI with the `liferay-learn:message` tag. For example, the *Click to Chat* app links to the [Chatwoot](https://learn.liferay.com/w/dxp/site-building/personalizing-site-experience/enabling-automated-live-chat-systems/getting-a-chat-provider-account-id/chatwoot) Liferay Learn article.
+You can provide direct links to [Liferay Learn](https://learn.liferay.com) documentation from Liferay's UI with the `liferay-learn:message` tag. For example, the *Click to Chat* app links to the [Enabling Automated Live Chat Systems](https://learn.liferay.com/w/dxp/personalization/experiences/enabling-automated-live-chat-systems#getting-the-chat-provider-account-id-or-token) Liferay Learn article.
 
-![The Click to Chat page links to the Chatwoot article.](./images/01.png)
+![The Click to Chat page links to the Enabling Automated Live Chat Systems article.](./images/01.png)
 
 Now users can click your `liferay-learn:message` links to get help!
 
@@ -29,13 +29,13 @@ Start with specifying a resource.
 		"download-app": { // Resource key
 			"en_US": {
 				"message": "How can I download an app?", // Link label
-				"url": "https://learn.liferay.com/dxp/latest/en/system-administration/installing-and-managing-apps/installing-apps/downloading-apps.html" // Resource URL
+				"url": "https://learn.liferay.com/w/dxp/security-and-administration/administration/installing-and-managing-apps/installing-apps/downloading-apps" // Resource URL
 			}
 		},
 		"purchase-app": {
 			"en_US": {
 				"message": "How can I purchase an app?",
-				"url": "https://learn.liferay.com/dxp/latest/en/system-administration/installing-and-managing-apps/getting-started/using-marketplace.html"
+				"url": "https://learn.liferay.com/w/dxp/security-and-administration/administration/installing-and-managing-apps/using-marketplace"
 			}
 		}
 	}
@@ -58,7 +58,7 @@ In your module's JSP, link to the resources using `liferay-learn:message` tags. 
 />
 ```
 
-The first line above includes the `liferay-learn` tag library. The `liferay-learn:message` tag links to the `download-app` resource in the `learn-resources/data/marketplace-store-web.json` file. When the JSP renders, the text *How can I download an app?* links to the resource located at <https://learn.liferay.com/dxp/latest/en/system-administration/installing-and-managing-apps/installing-apps/downloading-apps.html>.
+The first line above includes the `liferay-learn` tag library. The `liferay-learn:message` tag links to the `download-app` resource in the `learn-resources/data/marketplace-store-web.json` file. When the JSP renders, the text *How can I download an app?* links to the resource located at <https://learn.liferay.com/w/dxp/security-and-administration/administration/installing-and-managing-apps/installing-apps/downloading-apps>.
 
 That's how you link to Liferay Learn resources!
 

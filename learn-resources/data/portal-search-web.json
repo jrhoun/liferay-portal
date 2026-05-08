@@ -8,7 +8,7 @@
 	"elasticsearch-end-of-life": {
 		"en_US": {
 			"message": "Learn more.",
-			"url": "https://help.liferay.com/hc/en-us/articles/35072800462733-Elasticsearch-7-17-End-of-Life-EOL-Timeline-and-Liferay-DXP-Elasticsearch-Compatibility-Update-FAQ"
+			"url": "https://support.liferay.com/w/elasticsearch-7-17-end-of-life-eol-timeline-and-liferay-dxp-elasticsearch-compatibility-update-faq"
 		}
 	},
 	"install-elasticsearch": {
@@ -40,7 +40,7 @@
 	},
 	"search-engine-compatibility": {
 		"en_US": {
-			"url": "https://help.liferay.com/hc/en-us/articles/360016511651-Search-Engine-Compatibility-Matrix"
+			"url": "https://support.liferay.com/w/search-engine-compatibility-matrix"
 		}
 	},
 	"search-pages-and-widgets": {

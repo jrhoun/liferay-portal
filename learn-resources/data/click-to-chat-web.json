@@ -23,6 +23,12 @@
 			"url": "https://learn.liferay.com/w/dxp/personalization/experiences/enabling-automated-live-chat-systems#getting-the-chat-provider-account-id-or-token"
 		}
 	},
+	"chat-provider-account-id-intercom": {
+		"en_US": {
+			"message": "Get my account token for Intercom.",
+			"url": "https://learn.liferay.com/w/dxp/personalization/experiences/enabling-automated-live-chat-systems#getting-the-chat-provider-account-id-or-token"
+		}
+	},
 	"chat-provider-account-id-jivochat": {
 		"en_US": {
 			"message": "Get my account token for JivoChat.",

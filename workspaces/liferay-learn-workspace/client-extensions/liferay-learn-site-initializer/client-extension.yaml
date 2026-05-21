@@ -9,5 +9,10 @@ liferay-learn-site-initializer-oahs:
     .serviceScheme: http
     name: Liferay Learn Site Initializer OAuth Application Headless Server
     scopes:
+        -   Liferay.Data.Engine.REST.everything
+        -   Liferay.Headless.Admin.Site.everything
+        -   Liferay.Headless.Admin.Taxonomy.everything
+        -   Liferay.Headless.Admin.User.everything.read
+        -   Liferay.Headless.Delivery.everything
         -   Liferay.Headless.Site.everything
     type: oAuthApplicationHeadlessServer

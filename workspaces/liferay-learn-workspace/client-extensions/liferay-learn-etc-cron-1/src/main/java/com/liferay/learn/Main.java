@@ -69,6 +69,7 @@ import java.nio.file.Paths;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -78,6 +79,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -854,6 +856,22 @@ public class Main {
 	}
 
 	private String _getOAuthAuthorization() throws Exception {
+
+		// Basic-auth fallback for local-dev use. DXP 2026.q1.2-lts doesn't register
+		// ScopeFinder OSGi services for several headless-admin-* apps, so OAuth
+		// tokens come back with only Liferay.Headless.Site.everything and the
+		// cron's site lookup / data-engine / taxonomy / delivery calls 403. With
+		// LIFERAY_LEARN_ETC_CRON_BASIC_AUTH=user:pass set and the user's
+		// passwordreset flag cleared, basic auth bypasses scope checks entirely.
+		String basicAuth = System.getenv(
+			"LIFERAY_LEARN_ETC_CRON_BASIC_AUTH");
+
+		if ((basicAuth != null) && !basicAuth.isEmpty()) {
+			_oauthExpirationMillis = TimeUnit.DAYS.toMillis(30);
+			return "Basic " + Base64.getEncoder().encodeToString(
+				basicAuth.getBytes(StandardCharsets.UTF_8));
+		}
+
 		HttpPost httpPost = new HttpPost(_liferayURL + "/o/oauth2/token");
 
 		httpPost.setEntity(

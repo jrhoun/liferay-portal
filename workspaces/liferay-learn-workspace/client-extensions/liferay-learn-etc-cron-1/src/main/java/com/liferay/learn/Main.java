@@ -732,45 +732,53 @@ public class Main {
 	}
 
 	private void _getGitDiff(File dir) throws Exception {
-		Git git = Git.open(new File(dir, ".git"));
 
-		Repository repository = git.getRepository();
+		// Open the working-tree directory, not "<dir>/.git". JGit's repository
+		// cache resolves a gitdir-pointer file (used by worktrees) only when
+		// pointed at the working tree; passing the pointer file directly fails
+		// with RepositoryNotFoundException. Empirically verified against JGit
+		// 7.3.0.202506031305-r — Git.open(dir) follows the chain through
+		// ".git/worktrees/<name>" to the canonical git dir without help.
 
-		ObjectId newRev = repository.resolve("HEAD");
-		ObjectId oldRev = repository.resolve(_oldHash);
+		try (Git git = Git.open(dir)) {
+			Repository repository = git.getRepository();
 
-		_newHash = newRev.getName();
+			ObjectId newRev = repository.resolve("HEAD");
+			ObjectId oldRev = repository.resolve(_oldHash);
 
-		if (oldRev == null) {
-			return;
-		}
+			_newHash = newRev.getName();
 
-		CanonicalTreeParser newTreeParser = new CanonicalTreeParser();
-		CanonicalTreeParser oldTreeParser = new CanonicalTreeParser();
+			if (oldRev == null) {
+				return;
+			}
 
-		try (ObjectReader objectReader = repository.newObjectReader()) {
-			RevCommit newCommit = repository.parseCommit(newRev);
-			RevCommit oldCommit = repository.parseCommit(oldRev);
+			CanonicalTreeParser newTreeParser = new CanonicalTreeParser();
+			CanonicalTreeParser oldTreeParser = new CanonicalTreeParser();
 
-			RevTree newCommitTree = newCommit.getTree();
-			RevTree oldCommitTree = oldCommit.getTree();
+			try (ObjectReader objectReader = repository.newObjectReader()) {
+				RevCommit newCommit = repository.parseCommit(newRev);
+				RevCommit oldCommit = repository.parseCommit(oldRev);
 
-			newTreeParser.reset(objectReader, newCommitTree.getId());
-			oldTreeParser.reset(objectReader, oldCommitTree.getId());
-		}
+				RevTree newCommitTree = newCommit.getTree();
+				RevTree oldCommitTree = oldCommit.getTree();
 
-		List<DiffEntry> diffs = git.diff(
-		).setOldTree(
-			oldTreeParser
-		).setNewTree(
-			newTreeParser
-		).call();
+				newTreeParser.reset(objectReader, newCommitTree.getId());
+				oldTreeParser.reset(objectReader, oldCommitTree.getId());
+			}
 
-		for (DiffEntry diff : diffs) {
-			String newPath = diff.getNewPath();
+			List<DiffEntry> diffs = git.diff(
+			).setOldTree(
+				oldTreeParser
+			).setNewTree(
+				newTreeParser
+			).call();
 
-			if (newPath.endsWith(".md")) {
-				_diffFileNames.add("/" + newPath);
+			for (DiffEntry diff : diffs) {
+				String newPath = diff.getNewPath();
+
+				if (newPath.endsWith(".md")) {
+					_diffFileNames.add("/" + newPath);
+				}
 			}
 		}
 	}
@@ -863,13 +871,17 @@ public class Main {
 		// cron's site lookup / data-engine / taxonomy / delivery calls 403. With
 		// LIFERAY_LEARN_ETC_CRON_BASIC_AUTH=user:pass set and the user's
 		// passwordreset flag cleared, basic auth bypasses scope checks entirely.
-		String basicAuth = System.getenv(
-			"LIFERAY_LEARN_ETC_CRON_BASIC_AUTH");
+
+		String basicAuth = System.getenv("LIFERAY_LEARN_ETC_CRON_BASIC_AUTH");
 
 		if ((basicAuth != null) && !basicAuth.isEmpty()) {
 			_oauthExpirationMillis = TimeUnit.DAYS.toMillis(30);
-			return "Basic " + Base64.getEncoder().encodeToString(
-				basicAuth.getBytes(StandardCharsets.UTF_8));
+
+			return "Basic " +
+				Base64.getEncoder(
+				).encodeToString(
+					basicAuth.getBytes(StandardCharsets.UTF_8)
+				);
 		}
 
 		HttpPost httpPost = new HttpPost(_liferayURL + "/o/oauth2/token");
